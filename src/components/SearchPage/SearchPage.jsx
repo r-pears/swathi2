@@ -8,7 +8,6 @@ const SearchPage = () => {
   const [recipes, setRecipes] = useState([]);
   const navigate = useNavigate(); 
 
- 
   const fetchMeals = async () => {
     if (!searchQuery) return; 
     try {
@@ -20,50 +19,52 @@ const SearchPage = () => {
     }
   };
 
- 
   const handleRecipeClick = (id) => {
     navigate(`/recipe/${id}`); 
   };
 
   return (
-    <div>
-     
+    <main>
       <Header />
+      
+      <section className="search-page">
+        <header>
+          <h2>Find recipes by name, cuisine, ingredients, or category.</h2>
+        </header>
 
-      <div className="search-page">
-        <h2>Find recipes by name, cuisine, ingredients, or category.</h2>
-        
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} 
-          placeholder="Search"
-        />
-       
-        <button onClick={fetchMeals}>Search</button>
+        <div className="search-bar">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} 
+            placeholder="Search"
+            aria-label="Search recipes"
+          />
+          <button onClick={fetchMeals} 
+          aria-label="Search recipes">Search</button>
+        </div>
 
-       
-        <div>
+        <section>
           <h3>Results:</h3>
           {recipes.length === 0 ? (
             <p>No recipes found. Try another search.</p>
           ) : (
             <div className="recipe-list">
               {recipes.map((recipe) => (
-                <div
+                <article
                   key={recipe.idMeal}
                   className="recipe-card"
                   onClick={() => handleRecipeClick(recipe.idMeal)} 
                 >
                   <img src={recipe.strMealThumb} alt={recipe.strMeal} />
                   <h4>{recipe.strMeal}</h4>
-                </div>
+                </article>
               ))}
             </div>
           )}
-        </div>
-      </div>
-    </div>
+        </section>
+      </section>
+    </main>
   );
 };
 
