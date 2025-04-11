@@ -10,8 +10,12 @@
 
 .titles h3 {
     font-size: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 60px;  
     color: #333;
+}
+
+h3 {
+    margin-bottom: 30px; 
 }
 
 .recipes {
@@ -26,6 +30,8 @@
     max-width: 150px; 
     text-align: center; 
     box-sizing: border-box;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .recipe img {
@@ -41,16 +47,19 @@
     margin-top: 10px;
 }
 
+.recipe:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
 
 @media (min-width: 768px) {
     .recipe {
-        width: calc(25% - 20px); 
+        width: calc(14.28% - 20px);
     }
 }
 
 @media (min-width: 1024px) {
     .recipe {
-        width: calc(12.5% - 20px); 
+        width: calc(14.28% - 20px);
     }
 }
-

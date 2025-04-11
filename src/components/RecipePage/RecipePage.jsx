@@ -8,7 +8,6 @@ const RecipePage = () => {
   const [recipe, setRecipe] = useState(null); 
 
   useEffect(() => {
-    
     const fetchRecipeDetails = async () => {
       const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
       const data = await response.json();
@@ -17,23 +16,22 @@ const RecipePage = () => {
     fetchRecipeDetails();
   }, [id]);
 
- 
   const goBack = () => {
     navigate('/search'); 
   };
-
 
   if (!recipe) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="recipe-page">
-      <h2>{recipe.strMeal}</h2>
+    <article className="recipe-page">
+      <header>
+        <h2>{recipe.strMeal}</h2>
+        <img className="recipe-image" src={recipe.strMealThumb} alt={recipe.strMeal} />
+      </header>
 
-      <img className="recipe-image" src={recipe.strMealThumb} alt={recipe.strMeal} />
-
-      <div className="ingredients-section">
+      <section className="ingredients-section">
         <h3>Ingredients</h3>
         <ul className="ingredients-list">
           {Object.keys(recipe).map((key) => {
@@ -47,22 +45,21 @@ const RecipePage = () => {
             return null;
           })}
         </ul>
-      </div>
+      </section>
 
-   
-      <div className="instructions-section">
+      <section className="instructions-section">
         <h3>Instructions</h3>
         <ul className="instructions-list"> 
           {recipe.strInstructions.split('.').map((step, index) => (
             <li key={index}>{step.trim()}</li>
           ))}
         </ul>
-      </div>
+      </section>
 
-      <button className="go-back-button" onClick={goBack}>Back to Search</button>
-    </div>
+      <button className="go-back-button" 
+      onClick={goBack}>Back to Search</button>
+    </article>
   );
 };
 
 export default RecipePage;
-
