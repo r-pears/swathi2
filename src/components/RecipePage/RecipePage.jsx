@@ -1,23 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import './RecipePage.css';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import "./RecipePage.css";
 
 const RecipePage = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [recipe, setRecipe] = useState(null); 
+  const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
+    // use trycatch to handle errors
     const fetchRecipeDetails = async () => {
-      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
-      const data = await response.json();
-      setRecipe(data.meals[0]); 
+      try {
+        const response = await fetch(
+          `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
+        );
+        // check if response is ok
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setRecipe(data.meals[0]);
+      } catch (error) {
+        console.error("Error fetching recipe details:", error);
+      }
     };
     fetchRecipeDetails();
   }, [id]);
 
   const goBack = () => {
-    navigate('/search'); 
+    navigate("/search");
   };
 
   if (!recipe) {
@@ -27,18 +38,28 @@ const RecipePage = () => {
   return (
     <article className="recipe-page">
       <header>
-        <h2>{recipe.strMeal}</h2>
-        <img className="recipe-image" src={recipe.strMealThumb} alt={recipe.strMeal} />
+        {/* should be h1 */}
+        <h1>{recipe.strMeal}</h1>
+        <img
+          className="recipe-image"
+          src={recipe.strMealThumb}
+          alt={recipe.strMeal}
+        />
       </header>
 
       <section className="ingredients-section">
-        <h3>Ingredients</h3>
+        {/* should be a h2 */}
+        <h2>Ingredients</h2>
         <ul className="ingredients-list">
           {Object.keys(recipe).map((key) => {
-            if (key.includes('strIngredient') && recipe[key]) {
+            if (key.includes("strIngredient") && recipe[key]) {
               return (
                 <li key={key}>
-                  {recipe[key]} {recipe[`strMeasure${key.replace('strIngredient', '')}`] && ` - ${recipe[`strMeasure${key.replace('strIngredient', '')}`]}`}
+                  {recipe[key]}{" "}
+                  {recipe[`strMeasure${key.replace("strIngredient", "")}`] &&
+                    ` - ${
+                      recipe[`strMeasure${key.replace("strIngredient", "")}`]
+                    }`}
                 </li>
               );
             }
@@ -48,16 +69,18 @@ const RecipePage = () => {
       </section>
 
       <section className="instructions-section">
-        <h3>Instructions</h3>
-        <ul className="instructions-list"> 
-          {recipe.strInstructions.split('.').map((step, index) => (
+        {/* should be h2 */}
+        <h2>Instructions</h2>
+        <ul className="instructions-list">
+          {recipe.strInstructions.split(".").map((step, index) => (
             <li key={index}>{step.trim()}</li>
           ))}
         </ul>
       </section>
 
-      <button className="go-back-button" 
-      onClick={goBack}>Back to Search</button>
+      <button className="go-back-button" onClick={goBack}>
+        Back to Search
+      </button>
     </article>
   );
 };
